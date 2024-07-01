@@ -2,6 +2,7 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
+using System;
 using System.Threading.Tasks;
 
 namespace Microsoft.Data.SqlClient
@@ -10,6 +11,7 @@ namespace Microsoft.Data.SqlClient
     /// <include file='../../../../../../doc/snippets/Microsoft.Data.SqlClient/SqlAuthenticationProvider.xml' path='docs/members[@name="SqlAuthenticationProvider"]/SqlAuthenticationProvider/*'/>
     public abstract class SqlAuthenticationProvider
     {
+        /*
         /// <include file='../../../../../../doc/snippets/Microsoft.Data.SqlClient/SqlAuthenticationProvider.xml' path='docs/members[@name="SqlAuthenticationProvider"]/GetProvider/*'/>
         public static SqlAuthenticationProvider GetProvider(SqlAuthenticationMethod authenticationMethod)
         {
@@ -21,7 +23,7 @@ namespace Microsoft.Data.SqlClient
         {
             return SqlAuthenticationProviderManager.Instance.SetProvider(authenticationMethod, provider);
         }
-
+*/
         /// <include file='../../../../../../doc/snippets/Microsoft.Data.SqlClient/SqlAuthenticationProvider.xml' path='docs/members[@name="SqlAuthenticationProvider"]/BeforeLoad/*'/>
         public virtual void BeforeLoad(SqlAuthenticationMethod authenticationMethod) { }
 

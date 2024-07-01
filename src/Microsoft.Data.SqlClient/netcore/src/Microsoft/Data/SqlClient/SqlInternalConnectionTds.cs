@@ -17,7 +17,6 @@ using System.Threading.Tasks;
 using System.Transactions;
 using Microsoft.Data.Common;
 using Microsoft.Data.ProviderBase;
-using Microsoft.Identity.Client;
 
 namespace Microsoft.Data.SqlClient
 {
@@ -2348,10 +2347,10 @@ namespace Microsoft.Data.SqlClient
         internal SqlFedAuthToken GetFedAuthToken(SqlFedAuthInfo fedAuthInfo)
         {
             Debug.Assert(fedAuthInfo != null, "fedAuthInfo should not be null.");
-
+#if false_TODO_0xced
             // No:of milliseconds to sleep for the inital back off.
             int sleepInterval = 100;
-
+#endif
             // No:of attempts, for tracing purposes, if we underwent retries.
             int numberOfAttempts = 0;
 
@@ -2361,7 +2360,7 @@ namespace Microsoft.Data.SqlClient
             // Username to use in error messages.
             string username = null;
 
-            var authProvider = SqlAuthenticationProvider.GetProvider(ConnectionOptions.Authentication);
+            var authProvider = ConnectionOptions.GetAuthenticationProvider();
             if (authProvider == null && _accessTokenCallback == null)
                 throw SQL.CannotFindAuthProvider(ConnectionOptions.Authentication.ToString());
 
@@ -2483,7 +2482,7 @@ namespace Microsoft.Data.SqlClient
                     }
 
                     Debug.Assert(_fedAuthToken.accessToken != null, "AccessToken should not be null.");
-#if DEBUG
+#if DEBUG_TODO_0xced
                     if (_forceMsalRetry)
                     {
                         // 3399614468 is 0xCAA20004L just for testing.
@@ -2493,6 +2492,7 @@ namespace Microsoft.Data.SqlClient
                     // Break out of the retry loop in successful case.
                     break;
                 }
+#if false_TODO_0xced
                 // Deal with Msal service exceptions first, retry if 429 received.
                 catch (MsalServiceException serviceException)
                 {
@@ -2547,6 +2547,7 @@ namespace Microsoft.Data.SqlClient
                     Thread.Sleep(sleepInterval);
                     sleepInterval *= 2;
                 }
+#endif
                 // All other exceptions from MSAL/Azure Identity APIs
                 catch (Exception e)
                 {

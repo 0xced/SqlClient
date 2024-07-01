@@ -786,6 +786,11 @@ namespace Microsoft.Data.SqlClient
             }
         }
 
+        internal SqlAuthenticationProvider GetAuthenticationProvider()
+        {
+            throw new NotImplementedException($"TODO_0xced GetAuthenticationProvider({Authentication})");
+        }
+
         protected internal override string Expand()
         {
             if (_expandedAttachDBFilename != null)

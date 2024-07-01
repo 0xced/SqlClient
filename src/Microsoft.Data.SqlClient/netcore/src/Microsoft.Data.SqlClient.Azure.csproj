@@ -1,0 +1,81 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <AssemblyName>Microsoft.Data.SqlClient.Azure</AssemblyName>
+    <TargetFrameworks>net8.0;net6.0</TargetFrameworks>
+    <GeneratePlatformNotSupportedAssemblyMessage Condition="'$(OSGroup)' == 'AnyOS'">Microsoft.Data.SqlClient is not supported on this platform.</GeneratePlatformNotSupportedAssemblyMessage>
+    <OSGroup Condition="'$(OSGroup)' == ''">$(OS)</OSGroup>
+    <TargetsWindows Condition="'$(OSGroup)'=='Windows_NT'">true</TargetsWindows>
+    <TargetsUnix Condition="'$(OSGroup)'=='Unix'">true</TargetsUnix>
+    <!-- Allow explicit addition of the Compile files instead of all project files to be included by Default -->
+    <EnableDefaultCompileItems>false</EnableDefaultCompileItems>
+    <TargetGroup Condition="'$([MSBuild]::GetTargetFrameworkIdentifier($(TargetFramework)))'=='.NETCoreApp'">netcoreapp</TargetGroup>
+    <Configurations>Debug;Release;</Configurations>
+    <Platforms>AnyCPU;x64;x86</Platforms>
+    <IntermediateOutputPath>$(ObjFolder)$(Configuration).$(Platform)\$(AssemblyName)\netcore\</IntermediateOutputPath>
+    <OutputPath>$(BinFolder)$(Configuration).$(Platform)\$(AssemblyName)\netcore\</OutputPath>
+    <DocumentationFile>$(OutputPath)\$(TargetFramework)\Microsoft.Data.SqlClient.xml</DocumentationFile>
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+    <Product>Core $(BaseProduct)</Product>
+    <EnableTrimAnalyzer Condition="$([MSBuild]::IsTargetFrameworkCompatible('$(TargetFramework)', 'net6.0'))">true</EnableTrimAnalyzer>
+    <NoWarn>$(NoWarn);IL2026;IL2057;IL2072;IL2075</NoWarn>
+  </PropertyGroup>
+  <PropertyGroup>
+    <TargetFrameworkMonikerAssemblyAttributesPath>$([System.IO.Path]::Combine('$(IntermediateOutputPath)','$(TargetFrameworkMoniker).AssemblyAttributes$(DefaultLanguageSourceExtension)'))</TargetFrameworkMonikerAssemblyAttributesPath>
+  </PropertyGroup>
+  <ItemGroup>
+    <EmbeddedFiles Include="$(GeneratedAssemblyInfoFile)" />
+    <EmbeddedFiles Include="$(TargetFrameworkMonikerAssemblyAttributesPath)" />
+  </ItemGroup>  
+
+  <ItemGroup>
+    <Compile Include="Microsoft\Data\SqlClient\SqlAuthenticationProviderManager.cs" />
+    <Compile Include="Microsoft\Data\SqlClient\SqlAuthenticationProviderManager.NetCoreApp.cs" />
+    <Compile Include="$(CommonSourceRoot)Microsoft\Data\SqlClient\ActiveDirectoryAuthenticationProvider.cs">
+      <Link>Microsoft\Data\SqlClient\ActiveDirectoryAuthenticationProvider.cs</Link>
+    </Compile>
+    <Compile Include="$(CommonSourceRoot)Microsoft\Data\SqlClient\AzureAttestationBasedEnclaveProvider.cs">
+      <Link>Microsoft\Data\SqlClient\AzureAttestationBasedEnclaveProvider.cs</Link>
+    </Compile>
+  </ItemGroup>
+
+  <!-- Resources -->
+  <ItemGroup>
+<!--    <Compile Include="$(CommonSourceRoot)Resources\StringsHelper.cs">-->
+<!--      <Link>Resources\StringsHelper.cs</Link>-->
+<!--    </Compile>-->
+<!--    <Compile Include="$(CommonSourceRoot)Resources\Strings.Designer.cs">-->
+<!--      <Link>Resources\Strings.Designer.cs</Link>-->
+<!--      <DesignTime>True</DesignTime>-->
+<!--      <AutoGen>True</AutoGen>-->
+<!--      <DependentUpon>Strings.resx</DependentUpon>-->
+<!--    </Compile>-->
+<!--    <EmbeddedResource Include="$(CommonSourceRoot)Resources\Strings.resx">-->
+<!--      <Link>Resources\Strings.resx</Link>-->
+<!--      <LogicalName>Microsoft.Data.SqlClient.Resources.Strings.resources</LogicalName>-->
+<!--      <Generator>ResXFileCodeGenerator</Generator>-->
+<!--      <LastGenOutput>Strings.Designer.cs</LastGenOutput>-->
+<!--      <CustomToolNamespace>System</CustomToolNamespace>-->
+<!--    </EmbeddedResource>-->
+<!--    <EmbeddedResource Include="$(CommonSourceRoot)Resources\$(ResxFileName).*.resx">-->
+<!--      <Link>Resources\%(RecursiveDir)%(Filename)%(Extension)</Link>-->
+<!--    </EmbeddedResource>-->
+<!--    <EmbeddedResource Include="Resources\Microsoft.Data.SqlClient.SqlMetaData.xml">-->
+<!--      <LogicalName>Microsoft.Data.SqlClient.SqlMetaData.xml</LogicalName>-->
+<!--    </EmbeddedResource>-->
+  </ItemGroup>
+
+  <!-- Package References Etc -->
+  <ItemGroup>
+    <PackageReference Include="Azure.Core" Version="$(AzureCoreVersion)" />
+    <PackageReference Include="Azure.Identity" Version="$(AzureIdentityVersion)" />
+    <PackageReference Include="Microsoft.IdentityModel.Protocols.OpenIdConnect" Version="$(MicrosoftIdentityModelProtocolsOpenIdConnectVersion)" />
+    <PackageReference Include="Microsoft.IdentityModel.JsonWebTokens" Version="$(MicrosoftIdentityModelJsonWebTokensVersion)" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\src\Microsoft.Data.SqlClient.csproj" />
+  </ItemGroup>
+  <Import Project="$(ToolsDir)targets\GenerateThisAssemblyCs.targets" />
+  <Import Project="$(ToolsDir)targets\ResolveContract.targets" Condition="'$(OSGroup)' == 'AnyOS'" />
+  <Import Project="$(ToolsDir)targets\NotSupported.targets" Condition="'$(OSGroup)' == 'AnyOS'" />
+  <Import Project="$(CommonSourceRoot)tools\targets\GenerateResourceStringsSource.targets" />
+</Project>

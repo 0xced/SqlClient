@@ -1,0 +1,20 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <EnableDefaultCompileItems>false</EnableDefaultCompileItems>
+    <TargetFrameworks>net6.0;net8.0</TargetFrameworks>
+    <IntermediateOutputPath>$(ObjFolder)$(Configuration)\$(AssemblyName)\ref\</IntermediateOutputPath>
+    <OutputPath>$(BinFolder)$(Configuration)\$(AssemblyName)\ref\</OutputPath>
+    <DocumentationFile>$(OutputPath)\$(TargetFramework)\Microsoft.Data.SqlClient.xml</DocumentationFile>
+    <Product>Core $(BaseProduct)</Product>
+    <Configurations>Debug;Release;</Configurations>
+    <TargetGroup Condition="'$([MSBuild]::GetTargetFrameworkIdentifier($(TargetFramework)))'=='.NETCoreApp'">netcoreapp</TargetGroup>
+    <Platforms>AnyCPU;x64;x86</Platforms>
+  </PropertyGroup>
+  <ItemGroup>
+    <Compile Include="Microsoft.Data.SqlClient.Azure.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="Microsoft.Data.SqlClient.csproj" />
+    <PackageReference Include="Azure.Identity" Version="$(AzureIdentityVersion)" />
+  </ItemGroup>
+</Project>

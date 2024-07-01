@@ -20,7 +20,6 @@ using System.Threading.Tasks;
 using System.Transactions;
 using Microsoft.Data.SqlClient;
 using IsolationLevel = System.Data.IsolationLevel;
-using Microsoft.Identity.Client;
 using Microsoft.SqlServer.Server;
 using System.Security.Authentication;
 
@@ -449,7 +448,7 @@ namespace Microsoft.Data.Common
             => Argument(StringsHelper.GetString(Strings.ADP_InvalidArgumentLength, argumentName, limit));
 
         internal static ArgumentException MustBeReadOnly(string argumentName) => Argument(StringsHelper.GetString(Strings.ADP_MustBeReadOnly, argumentName));
-
+#if false_TODO_0xced
         internal static Exception CreateSqlException(MsalException msalException, SqlConnectionString connectionOptions, SqlInternalConnectionTds sender, string username)
         {
             // Error[0]
@@ -475,7 +474,7 @@ namespace Microsoft.Data.Common
             }
             return SqlException.CreateException(sqlErs, "", sender, innerException: null, batchCommand: null);
         }
-
+#endif
 #endregion
 
 #region CommandBuilder, Command, BulkCopy
